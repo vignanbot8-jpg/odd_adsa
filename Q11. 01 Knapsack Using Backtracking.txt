@@ -1,0 +1,30 @@
+Q11. 0/1 Knapsack Using Backtracking
+def knapsack_backtrack(values, weights, capacity, n):
+    if n == 0 or capacity == 0:
+        return 0
+
+    if weights[n - 1] > capacity:
+        return knapsack_backtrack(
+            values, weights, capacity, n - 1
+        )
+    else:
+        include = values[n - 1] + knapsack_backtrack(
+            values, weights,
+            capacity - weights[n - 1], n - 1
+        )
+
+        exclude = knapsack_backtrack(
+            values, weights, capacity, n - 1
+        )
+
+        return max(include, exclude)
+
+values = [60, 100, 120]
+weights = [10, 20, 30]
+W = 50
+
+max_value = knapsack_backtrack(
+    values, weights, W, len(values)
+)
+
+print("Maximum value in Knapsack =", max_value)

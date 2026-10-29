@@ -1,0 +1,66 @@
+Quick Sort and Merge Sort with Execution Time
+import random
+import time
+
+def quick_sort(arr):
+    if len(arr) <= 1:
+        return arr
+
+    pivot = arr[len(arr) // 2]
+    left = [x for x in arr if x < pivot]
+    middle = [x for x in arr if x == pivot]
+    right = [x for x in arr if x > pivot]
+
+    return quick_sort(left) + middle + quick_sort(right)
+
+def merge_sort(arr):
+    if len(arr) <= 1:
+        return arr
+
+    mid = len(arr) // 2
+    left = merge_sort(arr[:mid])
+    right = merge_sort(arr[mid:])
+    return merge(left, right)
+
+def merge(left, right):
+    result = []
+    i = j = 0
+
+    while i < len(left) and j < len(right):
+        if left[i] < right[j]:
+            result.append(left[i])
+            i += 1
+        else:
+            result.append(right[j])
+            j += 1
+
+    result.extend(left[i:])
+    result.extend(right[j:])
+    return result
+
+def measure_time(sort_func, arr):
+    start = time.time()
+    sort_func(arr.copy())
+    return time.time() - start
+
+sizes = [1000, 5000, 10000]
+
+for size in sizes:
+    print("\nInput size:", size)
+
+    arr_avg = [random.randint(0, size) for _ in range(size)]
+    arr_best = sorted(arr_avg)
+    arr_worst = sorted(arr_avg, reverse=True)
+
+    cases = [
+        ("Average", arr_avg),
+        ("Best", arr_best),
+        ("Worst", arr_worst)
+    ]
+
+    for name, arr in cases:
+        tq = measure_time(quick_sort, arr)
+        tm = measure_time(merge_sort, arr)
+
+        print(f"{name} Case - Quick Sort: {tq:.5f}s, "
+              f"Merge Sort: {tm:.5f}s")

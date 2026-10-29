@@ -1,0 +1,76 @@
+Q3. Breadth First Traversal (BFT) and Depth First Traversal (DFT)from collections import deque
+
+# Adjacency matrix
+matrix = [
+    [0, 1, 1, 0],
+    [1, 0, 0, 1],
+    [1, 0, 0, 1],
+    [0, 1, 1, 0]
+]
+
+def bft_matrix(graph, start):
+    visited = [False] * len(graph)
+    queue = deque([start])
+    visited[start] = True
+
+    while queue:
+        v = queue.popleft()
+        print(v, end=" ")
+        for i in range(len(graph)):
+            if graph[v][i] == 1 and not visited[i]:
+                visited[i] = True
+                queue.append(i)
+
+def dft_matrix(graph, start, visited=None):
+    if visited is None:
+        visited = [False] * len(graph)
+
+    visited[start] = True
+    print(start, end=" ")
+
+    for i in range(len(graph)):
+        if graph[start][i] == 1 and not visited[i]:
+            dft_matrix(graph, i, visited)
+
+print("BFT (Adjacency Matrix):")
+bft_matrix(matrix, 0)
+
+print("\nDFT (Adjacency Matrix):")
+dft_matrix(matrix, 0)
+
+# Adjacency list
+graph = {
+    0: [1, 2],
+    1: [0, 3],
+    2: [0, 3],
+    3: [1, 2]
+}
+
+def bft_list(graph, start):
+    visited = {start}
+    queue = deque([start])
+
+    while queue:
+        v = queue.popleft()
+        print(v, end=" ")
+        for neighbor in graph[v]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)
+
+def dft_list(graph, start, visited=None):
+    if visited is None:
+        visited = set()
+
+    visited.add(start)
+    print(start, end=" ")
+
+    for neighbor in graph[start]:
+        if neighbor not in visited:
+            dft_list(graph, neighbor, visited)
+
+print("\n\nBFT (Adjacency List):")
+bft_list(graph, 0)
+
+print("\nDFT (Adjacency List):")
+dft_list(graph, 0)

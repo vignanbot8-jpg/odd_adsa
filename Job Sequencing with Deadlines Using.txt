@@ -1,0 +1,41 @@
+Job Sequencing with Deadlines Using Greedy Strategy
+class Job:
+    def __init__(self, job_id, deadline, profit):
+        self.id = job_id
+        self.deadline = deadline
+        self.profit = profit
+
+def job_sequencing(jobs):
+    # Sort jobs by decreasing profit
+    jobs.sort(key=lambda x: x.profit, reverse=True)
+
+    n = max(job.deadline for job in jobs)
+    result = [None] * n
+    total_profit = 0
+
+    for job in jobs:
+        for slot in range(job.deadline - 1, -1, -1):
+            if result[slot] is None:
+                result[slot] = job.id
+                total_profit += job.profit
+                break
+
+    scheduled_jobs = [j for j in result if j is not None]
+    return scheduled_jobs, total_profit
+
+jobs = [
+    Job('A', 7, 15),
+    Job('B', 2, 20),
+    Job('C', 5, 30),
+    Job('D', 3, 18),
+    Job('E', 4, 18),
+    Job('F', 5, 10),
+    Job('G', 2, 23),
+    Job('H', 7, 16),
+    Job('I', 3, 25)
+]
+
+scheduled_jobs, total_profit = job_sequencing(jobs)
+
+print("Scheduled Jobs:", scheduled_jobs)
+print("Total Profit:", total_profit)
